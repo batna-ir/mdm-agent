@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<players>
+    <messaging>https://matrix.batna.ir</messaging>
+    <cloud></cloud>
+    <voip></voip>
+    <market>
+        <marketUrl></marketUrl>
+        <marketDesc></marketDesc>
+        <marketHost></marketHost>
+    </market>
+</players>
