@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Bakhtiari on August 09,2020
+ * Created by Mehdi-git on August 09,2020
  * This class parses XML file and return specific tags content
  */
 public class XmlParser {

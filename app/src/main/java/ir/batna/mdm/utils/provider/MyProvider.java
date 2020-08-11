@@ -13,8 +13,7 @@ import java.util.Objects;
 import ir.batna.mdm.utils.XmlParser;
 
 /**
- * Created by Bakhtiari on August 09,2020
- *
+ * Created by Mehdi-git on August 09,2020
  */
 public class MyProvider extends ContentProvider {
 
@@ -85,7 +84,7 @@ public class MyProvider extends ContentProvider {
     public Cursor getCursorFromXml(String packageName) {
 
         MatrixCursor mCursor = new MatrixCursor(
-                new String[]{"_id", "url1","url2","url3"}
+                new String[]{"_id", "url1", "url2", "url3"}
         );
 
         if (packageName != null)
@@ -98,9 +97,7 @@ public class MyProvider extends ContentProvider {
                             .add("_id", 0)
                             .add("url1", mXmlReader.getUrl());
                     break;
-
-
-        }
+            }
         return mCursor;
     }
 }
