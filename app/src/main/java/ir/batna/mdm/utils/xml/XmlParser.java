@@ -1,4 +1,4 @@
-package ir.batna.mdm.utils;
+package ir.batna.mdm.utils.xml;
 import android.content.Context;
 import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;

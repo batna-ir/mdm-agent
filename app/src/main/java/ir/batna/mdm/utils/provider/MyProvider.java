@@ -6,25 +6,24 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.Objects;
-import ir.batna.mdm.utils.XmlParser;
+
+import ir.batna.mdm.utils.Constants;
+import ir.batna.mdm.utils.xml.XmlParser;
 
 /**
  * Created by Mehdi-git on August 09,2020
  */
 public class MyProvider extends ContentProvider {
 
-
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    static final String AUTHORITY = "ir.batna.mdm.utils.provider.MyProvider";
-    private static final int APPS = 1;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher mMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        mMatcher.addURI(AUTHORITY, "apps", APPS);
+        mMatcher.addURI(Constants.AUTHORITY, Constants.PATH, Constants.URI_CODE);
         return mMatcher;
     }
 
@@ -35,18 +34,18 @@ public class MyProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection,
+    public Cursor query(@NonNull Uri uri,
+                        @Nullable String[] projection,
                         @Nullable String selection,
                         @Nullable String[] selectionArgs,
                         @Nullable String sortOrder) {
 
-        //Log.d("MBD", "Calling package:   " + getCallingPackage());
         final int match = sUriMatcher.match(uri);
         Cursor c;
-        if (match == APPS) {
+        if (match == Constants.URI_CODE) {
             c = getCursorFromXml(Objects.requireNonNull(getCallingPackage()));
         } else {
-            throw new IllegalArgumentException("Unknown URI:" + uri);
+            throw new IllegalArgumentException(Constants.UNKNOWN_URI + uri);
         }
         c.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
         return c;
@@ -58,10 +57,10 @@ public class MyProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case APPS:
-                return AppsContract.CONTENT_ITEM_TYPE;
+            case Constants.URI_CODE:
+                return Constants.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unknown Uri " + uri);
+                throw new IllegalArgumentException(Constants.UNKNOWN_URI + uri);
         }
     }
 
@@ -72,30 +71,34 @@ public class MyProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int delete(@NonNull Uri uri,
+                      @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(@NonNull Uri uri,
+                      @Nullable ContentValues values,
+                      @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
         throw new UnsupportedOperationException();
     }
 
     public Cursor getCursorFromXml(String packageName) {
 
         MatrixCursor mCursor = new MatrixCursor(
-                new String[]{"_id", "url1", "url2", "url3"}
+                new String[]{Constants.COLUMN_ID, Constants.COLUMN_URL_1}
         );
 
         if (packageName != null)
             switch (packageName) {
 
-                case "ir.batna.messaging":
-                    XmlParser mXmlReader = new XmlParser(getContext(), AppsContract.MESSAGING_APP_TAG);
-                    Log.d("MBD", "package name:" + packageName + "   url:  " + mXmlReader.getUrl());
+                case Constants.MESSAGING_APP_ID:
+                    XmlParser mXmlReader = new XmlParser(getContext(), Constants.MESSAGING_APP_TAG);
                     mCursor.newRow()
-                            .add("_id", 0)
-                            .add("url1", mXmlReader.getUrl());
+                            .add(Constants.COLUMN_ID, 0)
+                            .add(Constants.COLUMN_URL_1, mXmlReader.getUrl());
                     break;
             }
         return mCursor;
