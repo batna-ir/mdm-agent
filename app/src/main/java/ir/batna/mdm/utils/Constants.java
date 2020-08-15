@@ -12,7 +12,8 @@ public class Constants {
     public static final String UNKNOWN_URI = "Unknown URI:";
     public static final String MESSAGING_APP_TAG = "messaging";
     public static final String MESSAGING_APP_ID = "ir.batna.messaging";
-
+    public static final String VOIP_APP_TAG = "voip";
+    public static final String VOIP_APP_ID = "ir.batna.talk.debug";
 }
 
 

@@ -6,11 +6,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.Objects;
-
 import ir.batna.mdm.utils.Constants;
 import ir.batna.mdm.utils.xml.XmlParser;
 
@@ -93,12 +91,17 @@ public class MyProvider extends ContentProvider {
 
         if (packageName != null)
             switch (packageName) {
-
                 case Constants.MESSAGING_APP_ID:
-                    XmlParser mXmlReader = new XmlParser(getContext(), Constants.MESSAGING_APP_TAG);
+                    XmlParser xmlParser = new XmlParser(getContext(), Constants.MESSAGING_APP_TAG);
                     mCursor.newRow()
                             .add(Constants.COLUMN_ID, 0)
-                            .add(Constants.COLUMN_URL_1, mXmlReader.getUrl());
+                            .add(Constants.COLUMN_URL_1, xmlParser.getUrl());
+                    break;
+                case Constants.VOIP_APP_ID:
+                    XmlParser xmlParser2 = new XmlParser(getContext(), Constants.VOIP_APP_TAG);
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID, 0)
+                            .add(Constants.COLUMN_URL_1, xmlParser2.getUrl());
                     break;
             }
         return mCursor;
