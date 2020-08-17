@@ -97,11 +97,19 @@ public class MyProvider extends ContentProvider {
                             .add(Constants.COLUMN_ID, 0)
                             .add(Constants.COLUMN_URL_1, xmlParser.getUrl());
                     break;
+
                 case Constants.VOIP_APP_ID:
                     XmlParser xmlParser2 = new XmlParser(getContext(), Constants.VOIP_APP_TAG);
                     mCursor.newRow()
                             .add(Constants.COLUMN_ID, 0)
                             .add(Constants.COLUMN_URL_1, xmlParser2.getUrl());
+                    break;
+
+                case Constants.CLOUD_APP_ID:
+                    XmlParser xmlParser3 = new XmlParser(getContext(), Constants.CLOUD_APP_TAG);
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID, 0)
+                            .add(Constants.COLUMN_URL_1, xmlParser3.getUrl());
                     break;
             }
         return mCursor;

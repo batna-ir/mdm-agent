@@ -50,11 +50,11 @@ public class XmlParser {
 
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
-            String eltName = null;
+            String tagName;
             switch (eventType) {
                 case XmlPullParser.START_TAG:
-                    eltName = parser.getName();
-                    if (appName.equalsIgnoreCase(eltName)) {
+                    tagName = parser.getName();
+                    if (appName.equalsIgnoreCase(tagName)) {
                         this.url = parser.nextText();
                     }
                     break;

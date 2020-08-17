@@ -2,7 +2,7 @@
 <players>
     <messaging>https://matrix.batna.ir</messaging>
     <voip>https://voip.batna.ir:5080</voip>
-    <cloud />
+    <cloud>https://test.cloud.batna.ir</cloud>
     <market>
         <marketUrl />
         <marketDesc />

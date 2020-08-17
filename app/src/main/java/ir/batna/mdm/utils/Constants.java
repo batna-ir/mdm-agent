@@ -14,6 +14,8 @@ public class Constants {
     public static final String MESSAGING_APP_ID = "ir.batna.messaging";
     public static final String VOIP_APP_TAG = "voip";
     public static final String VOIP_APP_ID = "ir.batna.talk.debug";
+    public static final String CLOUD_APP_TAG = "cloud";
+    public static final String CLOUD_APP_ID = "ir.batna.cloud";
 }
 
 
