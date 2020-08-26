@@ -55,10 +55,8 @@ public class XmlParser {
                 case XmlPullParser.START_TAG:
                     tagName = parser.getName();
                     if (appName.equalsIgnoreCase(tagName)) {
-                        //TODO for empty tag
                         String serverUrl = parser.nextText();
-                        if(!(serverUrl == null
-                                || serverUrl.isEmpty()
+                        if(!(serverUrl.isEmpty()
                                 || serverUrl.startsWith(" "))) {
                             this.url = serverUrl;
                         }
