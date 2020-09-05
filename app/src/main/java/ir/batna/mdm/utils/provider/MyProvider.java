@@ -6,16 +6,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.Objects;
-
 import ir.batna.mdm.utils.Constants;
 import ir.batna.mdm.utils.xml.XmlParser;
 
@@ -112,53 +105,54 @@ public class MyProvider extends ContentProvider {
 
         XmlParser xmlParser = new XmlParser(getContext());
 
-        switch (packageName) {
-            case Constants.MESSAGING_APP_ID:
-                mCursor.newRow()
-                        .add(Constants.COLUMN_ID,
-                                0)
-                        .add(Constants.COLUMN_URL_1,
-                                xmlParser.getContent(Constants.MESSAGING_URL_TAG));
-                break;
+        if (packageName != null)
+            switch (packageName) {
+                case Constants.MESSAGING_APP_ID:
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID,
+                                    0)
+                            .add(Constants.COLUMN_URL_1,
+                                    xmlParser.getContent(Constants.MESSAGING_URL_TAG));
+                    break;
 
-            case Constants.VOIP_APP_ID:
-                mCursor.newRow()
-                        .add(Constants.COLUMN_ID,
-                                0)
-                        .add(Constants.COLUMN_URL_1,
-                                xmlParser.getContent(Constants.VOIP_URL_TAG));
-                break;
+                case Constants.VOIP_APP_ID:
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID,
+                                    0)
+                            .add(Constants.COLUMN_URL_1,
+                                    xmlParser.getContent(Constants.VOIP_URL_TAG));
+                    break;
 
-            case Constants.CLOUD_APP_ID:
-                mCursor.newRow()
-                        .add(Constants.COLUMN_ID,
-                                0)
-                        .add(Constants.COLUMN_URL_1,
-                                xmlParser.getContent(Constants.CLOUD_URL_TAG));
-                break;
+                case Constants.CLOUD_APP_ID:
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID,
+                                    0)
+                            .add(Constants.COLUMN_URL_1,
+                                    xmlParser.getContent(Constants.CLOUD_URL_TAG));
+                    break;
 
-            case Constants.MARKET_APP_ID:
-                mCursor.newRow()
-                        .add(Constants.COLUMN_ID,
-                                0)
-                        .add(Constants.COLUMN_URL_1,
-                                xmlParser.getContent(Constants.MARKET_URL_TAG))
-                        .add(Constants.COLUMN_NAME,
-                                xmlParser.getContent(Constants.MARKET_NAME_TAG))
-                        .add(Constants.COLUMN_DESC,
-                                xmlParser.getContent(Constants.MARKET_DESC_TAG))
-                        .add(Constants.COLUMN_VERSION,
-                                xmlParser.getContent(Constants.MARKET_VERSION_TAG))
-                        .add(Constants.COLUMN_ENABLED,
-                                xmlParser.getContent(Constants.MARKET_ENABLED_TAG))
-                        .add(Constants.COLUMN_PRIORITY,
-                                xmlParser.getContent(Constants.MARKET_PRIORITY_TAG))
-                        .add(Constants.COLUMN_PUSH_REQUEST,
-                                xmlParser.getContent(Constants.MARKET_PUSH_TAG))
-                        .add(Constants.COLUMN_Hash,
-                                xmlParser.getContent(Constants.MARKET_HASH_TAG));
-                break;
-        }
+                case Constants.MARKET_APP_ID:
+                    mCursor.newRow()
+                            .add(Constants.COLUMN_ID,
+                                    0)
+                            .add(Constants.COLUMN_URL_1,
+                                    xmlParser.getContent(Constants.MARKET_URL_TAG))
+                            .add(Constants.COLUMN_NAME,
+                                    xmlParser.getContent(Constants.MARKET_NAME_TAG))
+                            .add(Constants.COLUMN_DESC,
+                                    xmlParser.getContent(Constants.MARKET_DESC_TAG))
+                            .add(Constants.COLUMN_VERSION,
+                                    xmlParser.getContent(Constants.MARKET_VERSION_TAG))
+                            .add(Constants.COLUMN_ENABLED,
+                                    xmlParser.getContent(Constants.MARKET_ENABLED_TAG))
+                            .add(Constants.COLUMN_PRIORITY,
+                                    xmlParser.getContent(Constants.MARKET_PRIORITY_TAG))
+                            .add(Constants.COLUMN_PUSH_REQUEST,
+                                    xmlParser.getContent(Constants.MARKET_PUSH_TAG))
+                            .add(Constants.COLUMN_Hash,
+                                    xmlParser.getContent(Constants.MARKET_HASH_TAG));
+                    break;
+            }
         return mCursor;
     }
 }

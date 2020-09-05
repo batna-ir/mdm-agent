@@ -10,10 +10,8 @@ public class Constants {
     public static final String UNKNOWN_URI = "Unknown URI:";
     public static final String XML_CONFIG_FILE = "config.xml";
 
-
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_URL_1 = "url1";
-
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DESC = "desc";
     public static final String COLUMN_VERSION = "version";
@@ -39,15 +37,6 @@ public class Constants {
     public static final String MARKET_PRIORITY_TAG = "market_priority";
     public static final String MARKET_PUSH_TAG = "market_push_requests";
     public static final String MARKET_HASH_TAG = "market_hash";
-
-
-
-
-
-
-
-
-
 
 }
 

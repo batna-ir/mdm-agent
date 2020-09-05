@@ -1,8 +1,11 @@
 package ir.batna.mdm.utils.xml;
+
 import android.content.Context;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 
