@@ -6,9 +6,16 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.Objects;
+
 import ir.batna.mdm.utils.Constants;
 import ir.batna.mdm.utils.xml.XmlParser;
 
@@ -39,14 +46,20 @@ public class MyProvider extends ContentProvider {
                         @Nullable String sortOrder) {
 
         final int match = sUriMatcher.match(uri);
-        Cursor c;
+        Cursor cursor = null;
         if (match == Constants.URI_CODE) {
-            c = getCursorFromXml(Objects.requireNonNull(getCallingPackage()));
+            try {
+                cursor = getCursorFromXml(Objects.requireNonNull(getCallingPackage()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             throw new IllegalArgumentException(Constants.UNKNOWN_URI + uri);
         }
-        c.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
-        return c;
+        if (cursor != null) {
+            cursor.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
+        }
+        return cursor;
     }
 
     @Nullable
@@ -54,17 +67,16 @@ public class MyProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
 
-        switch (match) {
-            case Constants.URI_CODE:
-                return Constants.CONTENT_ITEM_TYPE;
-            default:
-                throw new IllegalArgumentException(Constants.UNKNOWN_URI + uri);
+        if (match == Constants.URI_CODE) {
+            return Constants.CONTENT_ITEM_TYPE;
         }
+        throw new IllegalArgumentException(Constants.UNKNOWN_URI + uri);
     }
 
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+    public Uri insert(@NonNull Uri uri,
+                      @Nullable ContentValues values) {
         throw new UnsupportedOperationException();
     }
 
@@ -86,32 +98,67 @@ public class MyProvider extends ContentProvider {
     public Cursor getCursorFromXml(String packageName) {
 
         MatrixCursor mCursor = new MatrixCursor(
-                new String[]{Constants.COLUMN_ID, Constants.COLUMN_URL_1}
-        );
+                new String[]{
+                        Constants.COLUMN_ID,
+                        Constants.COLUMN_URL_1,
+                        Constants.COLUMN_NAME,
+                        Constants.COLUMN_DESC,
+                        Constants.COLUMN_VERSION,
+                        Constants.COLUMN_ENABLED,
+                        Constants.COLUMN_PRIORITY,
+                        Constants.COLUMN_PUSH_REQUEST,
+                        Constants.COLUMN_Hash
+                });
 
-        if (packageName != null)
-            switch (packageName) {
-                case Constants.MESSAGING_APP_ID:
-                    XmlParser xmlParser = new XmlParser(getContext(), Constants.MESSAGING_APP_TAG);
-                    mCursor.newRow()
-                            .add(Constants.COLUMN_ID, 0)
-                            .add(Constants.COLUMN_URL_1, xmlParser.getUrl());
-                    break;
+        XmlParser xmlParser = new XmlParser(getContext());
 
-                case Constants.VOIP_APP_ID:
-                    XmlParser xmlParser2 = new XmlParser(getContext(), Constants.VOIP_APP_TAG);
-                    mCursor.newRow()
-                            .add(Constants.COLUMN_ID, 0)
-                            .add(Constants.COLUMN_URL_1, xmlParser2.getUrl());
-                    break;
+        switch (packageName) {
+            case Constants.MESSAGING_APP_ID:
+                mCursor.newRow()
+                        .add(Constants.COLUMN_ID,
+                                0)
+                        .add(Constants.COLUMN_URL_1,
+                                xmlParser.getContent(Constants.MESSAGING_URL_TAG));
+                break;
 
-                case Constants.CLOUD_APP_ID:
-                    XmlParser xmlParser3 = new XmlParser(getContext(), Constants.CLOUD_APP_TAG);
-                    mCursor.newRow()
-                            .add(Constants.COLUMN_ID, 0)
-                            .add(Constants.COLUMN_URL_1, xmlParser3.getUrl());
-                    break;
-            }
+            case Constants.VOIP_APP_ID:
+                mCursor.newRow()
+                        .add(Constants.COLUMN_ID,
+                                0)
+                        .add(Constants.COLUMN_URL_1,
+                                xmlParser.getContent(Constants.VOIP_URL_TAG));
+                break;
+
+            case Constants.CLOUD_APP_ID:
+                mCursor.newRow()
+                        .add(Constants.COLUMN_ID,
+                                0)
+                        .add(Constants.COLUMN_URL_1,
+                                xmlParser.getContent(Constants.CLOUD_URL_TAG));
+                break;
+
+            case Constants.MARKET_APP_ID:
+                mCursor.newRow()
+                        .add(Constants.COLUMN_ID,
+                                0)
+                        .add(Constants.COLUMN_URL_1,
+                                xmlParser.getContent(Constants.MARKET_URL_TAG))
+                        .add(Constants.COLUMN_NAME,
+                                xmlParser.getContent(Constants.MARKET_NAME_TAG))
+                        .add(Constants.COLUMN_DESC,
+                                xmlParser.getContent(Constants.MARKET_DESC_TAG))
+                        .add(Constants.COLUMN_VERSION,
+                                xmlParser.getContent(Constants.MARKET_VERSION_TAG))
+                        .add(Constants.COLUMN_ENABLED,
+                                xmlParser.getContent(Constants.MARKET_ENABLED_TAG))
+                        .add(Constants.COLUMN_PRIORITY,
+                                xmlParser.getContent(Constants.MARKET_PRIORITY_TAG))
+                        .add(Constants.COLUMN_PUSH_REQUEST,
+                                xmlParser.getContent(Constants.MARKET_PUSH_TAG))
+                        .add(Constants.COLUMN_Hash,
+                                xmlParser.getContent(Constants.MARKET_HASH_TAG));
+                break;
+        }
         return mCursor;
     }
 }

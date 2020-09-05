@@ -1,11 +1,12 @@
 package ir.batna.mdm.utils.xml;
 import android.content.Context;
-import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+
+import ir.batna.mdm.utils.Constants;
 
 /**
  * Created by Mehdi-git on August 09,2020
@@ -13,57 +14,59 @@ import java.io.InputStream;
  */
 public class XmlParser {
 
-    private String url = null;
-    private String appName;
+    private XmlPullParser parser;
+    private InputStream inputStream;
+    private Context mContext;
 
-    public XmlParser(Context context, String appName) {
-        this.appName = appName;
-        parseXML(context);
+    public XmlParser(Context context) {
+        this.mContext = context;
+        parseXML();
     }
 
-    public String getUrl() {
-        return this.url;
-    }
-
-    /**
-     * to parse Xml file from Assets folder
-     */
-    private void parseXML(Context context) {
-
-        XmlPullParserFactory parserFactory;
+    public void parseXML() {
         try {
-            parserFactory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = parserFactory.newPullParser();
-            InputStream inputStream = context.getAssets().open("config.xml");
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(inputStream, null);
-            processParsing(parser);
-        } catch (XmlPullParserException | IOException e) {
-            Log.d("MBD", e.getMessage());
+            XmlPullParserFactory parserFactory = XmlPullParserFactory.newInstance();
+            parser = parserFactory.newPullParser();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * To get content of specific tag(appName)
+     * parse Xml file from Assets folder
+     * To get content of specific xml tag
      */
-    private void processParsing(XmlPullParser parser) throws IOException, XmlPullParserException {
+    public String getContent(String name) {
 
-        int eventType = parser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            String tagName;
-            switch (eventType) {
-                case XmlPullParser.START_TAG:
+        String content = "";
+
+        try {
+            inputStream = mContext.getAssets().open(Constants.XML_CONFIG_FILE);
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(inputStream, null);
+
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName;
+                if (eventType == XmlPullParser.START_TAG) {
                     tagName = parser.getName();
-                    if (appName.equalsIgnoreCase(tagName)) {
-                        String serverUrl = parser.nextText();
-                        if(!(serverUrl.isEmpty()
-                                || serverUrl.startsWith(" "))) {
-                            this.url = serverUrl;
-                        }
+
+                    if (tagName.equalsIgnoreCase(name)) {
+                        content = parser.nextText();
                     }
-                    break;
+                }
+                eventType = parser.next();
             }
-            eventType = parser.next();
+
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!(content.isEmpty() || content.startsWith(" "))) {
+            return content;
+
+        } else {
+            return null;
         }
     }
 }
